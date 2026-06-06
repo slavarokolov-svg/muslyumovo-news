@@ -2,10 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Муслюмово — актуальные новости</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Муслюмово — сельские вести</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,187 +14,231 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease;
+            font-family: 'Rubik', sans-serif;
+            background: #f6f2e8 url('https://www.transparenttextures.com/patterns/wood-pattern.png') repeat;
+            color: #2c2418;
+            line-height: 1.5;
         }
 
-        :root {
-            --bg-primary: #f9fafb;
-            --bg-secondary: #ffffff;
-            --text-primary: #111827;
-            --text-secondary: #4b5563;
-            --accent: #c2410c;
-            --border-light: #e5e7eb;
-            --footer-bg: #1f2937;
-        }
-
-        body.dark {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border-light: #334155;
-            --footer-bg: #020617;
-        }
-
+        /* Тёмная тема отключаем — оставляем только светлую деревенскую */
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
+        /* Шапка с деревенским орнаментом */
         .header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-light);
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            background: linear-gradient(135deg, #4a3729 0%, #2f241b 100%);
+            color: #fff6e8;
+            padding: 1.2rem 0;
+            border-bottom: 6px solid #c9a87b;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .nav {
+        .header-content {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
-            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .logo h1 {
-            font-size: 1.7rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #c2410c, #f97316);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #f7d44a, #e6b422);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            text-shadow: none;
         }
-
         .logo p {
             font-size: 0.8rem;
-            color: var(--text-secondary);
+            color: #e6d5b8;
+            margin-top: 5px;
         }
 
-        .theme-toggle {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            border-radius: 60px;
-            padding: 8px 16px;
-            cursor: pointer;
+        /* Навигация — деревенское меню */
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #fff0db;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            border-bottom-color: #e6b422;
+            color: #ffdd99;
         }
 
+        /* Герой с картинкой села */
         .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/1676595/pexels-photo-1676595.jpeg?auto=compress&cs=tinysrgb&w=1600');
+            background-size: cover;
+            background-position: center 30%;
+            border-radius: 28px;
             margin: 2rem 0;
-            border-radius: 2rem;
-            background: linear-gradient(120deg, var(--bg-secondary), var(--bg-primary));
-            border: 1px solid var(--border-light);
-            padding: 2rem;
+            padding: 3rem 2rem;
             text-align: center;
-        }
-
-        .hero h2 {
-            font-size: 2rem;
-            background: linear-gradient(to right, #f97316, #dc2626);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .update-badge {
-            display: inline-block;
-            background: var(--accent);
             color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px #1e3c2c;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 1rem auto;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: #e6b422;
+            color: #2c1e12;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-weight: 600;
             margin-top: 12px;
         }
 
+        /* Секция новостей */
         .section-title {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 700;
             margin: 2rem 0 1rem;
-            border-left: 6px solid var(--accent);
-            padding-left: 18px;
+            padding-left: 20px;
+            border-left: 8px solid #c9a87b;
+            color: #3b2a1f;
         }
 
         .news-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
             margin: 2rem 0;
         }
 
         .news-card {
-            background: var(--bg-secondary);
-            border-radius: 1.5rem;
+            background: rgba(255, 248, 235, 0.95);
+            backdrop-filter: blur(2px);
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-light);
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border: 1px solid #eeddbb;
         }
-
         .news-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+            border-color: #c9a87b;
         }
 
         .card-img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            border-bottom: 3px solid #e6b422;
         }
 
         .card-content {
-            padding: 1.4rem;
+            padding: 1.5rem;
         }
 
         .date {
             font-size: 0.8rem;
-            color: var(--accent);
+            color: #b47c44;
             font-weight: 600;
+            margin-bottom: 10px;
             display: flex;
-            gap: 8px;
             align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .fresh-badge {
-            background: #22c55e;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 0.7rem;
+            gap: 6px;
         }
 
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin: 10px 0;
+            margin-bottom: 12px;
+            color: #2f241b;
+            line-height: 1.3;
         }
 
         .desc {
-            color: var(--text-secondary);
-            line-height: 1.5;
+            color: #4a3a2a;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
+        .source {
+            font-size: 0.7rem;
+            color: #b47c44;
+            border-top: 1px dashed #eeddbb;
+            padding-top: 10px;
+            display: inline-block;
+        }
+
+        /* Пагинация в деревенском стиле */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            background: #efdfbf;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #3b2a1f;
+        }
+        .page-btn.active {
+            background: #c9a87b;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .page-btn:hover:not(.active) {
+            background: #ddc8a4;
+        }
+
+        /* Подвал */
         .footer {
-            background: var(--footer-bg);
-            color: #94a3b8;
+            background: #2f241b;
+            color: #e6d5b8;
+            text-align: center;
             padding: 2rem 0;
             margin-top: 3rem;
-            text-align: center;
+            border-top: 4px solid #c9a87b;
+            font-size: 0.85rem;
         }
 
         .loading {
             text-align: center;
             padding: 3rem;
-            color: var(--accent);
+            font-size: 1.2rem;
+            color: #b47c44;
             grid-column: 1/-1;
         }
 
         @media (max-width: 700px) {
-            .hero h2 { font-size: 1.4rem; }
-            .news-grid { gap: 1rem; }
+            .hero h2 { font-size: 1.6rem; }
+            .nav-links { gap: 1rem; }
+            .container { padding: 0 16px; }
         }
     </style>
 </head>
@@ -202,13 +246,16 @@
 
 <header class="header">
     <div class="container">
-        <div class="nav">
+        <div class="header-content">
             <div class="logo">
-                <h1>Муслюмово LIFE</h1>
-                <p>Новости обновляются каждые 24 часа</p>
+                <h1><i class="fas fa-tree"></i> Муслюмово LIFE</h1>
+                <p>сельские вести • душа района</p>
             </div>
-            <div class="theme-toggle" id="themeToggle">
-                <i class="fas fa-moon"></i> Тема
+            <div class="nav-links">
+                <a href="#"><i class="fas fa-home"></i> Главная</a>
+                <a href="#"><i class="fas fa-landmark"></i> О селе</a>
+                <a href="#"><i class="fas fa-calendar-week"></i> События</a>
+                <a href="#"><i class="fas fa-phone-alt"></i> Контакты</a>
             </div>
         </div>
     </div>
@@ -216,83 +263,103 @@
 
 <main class="container">
     <div class="hero">
-        <h2>Актуальные новости Муслюмово</h2>
-        <p style="margin-top: 12px;">Новости хранятся 7 дней, затем автоматически удаляются</p>
-        <div class="update-badge">
-            <i class="fas fa-sync-alt"></i> Обновление: каждые 24 часа
-        </div>
+        <h2>Свежий взгляд на деревенскую жизнь</h2>
+        <p>Новости, которые касаются каждого • традиции • развитие • люди</p>
+        <div class="hero-badge"><i class="fas fa-sync-alt"></i> Обновление каждые 24 часа</div>
     </div>
 
     <div class="section-title">
-        <i class="fas fa-clock"></i> Свежие новости (последние 7 дней)
+        <i class="fas fa-newspaper"></i> Последние новости (хранятся 7 дней)
     </div>
 
     <div class="news-grid" id="newsGrid">
-        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка...</div>
+        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка деревенских новостей...</div>
     </div>
+
+    <div class="pagination" id="pagination"></div>
 </main>
 
 <footer class="footer">
     <div class="container">
-        <p>© 2026 Новости Муслюмово | Новости автоматически удаляются через 7 дней</p>
+        <p><i class="fas fa-map-marker-alt"></i> Муслюмово, ул. Центральная, 15 | <i class="fas fa-envelope"></i> vesti@muslumovo.ru</p>
+        <p style="margin-top: 12px;">© 2026 — новости села. Живём и работаем на родной земле.</p>
     </div>
 </footer>
 
 <script>
-    // Тёмная тема
-    const themeToggle = document.getElementById('themeToggle');
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark');
-    }
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    });
+    // Пагинация и загрузка с API
+    let allNews = [];
+    let currentPage = 1;
+    const newsPerPage = 6;
 
-    // Функция определения "свежести" новости (в днях)
-    function getFreshness(createdAt) {
-        const created = new Date(createdAt);
-        const now = new Date();
-        const diffHours = Math.floor((now - created) / (1000 * 60 * 60));
-        if (diffHours < 24) return { text: "Только что", class: "fresh-badge" };
-        if (diffHours < 48) return { text: "Вчера", class: "" };
-        const days = Math.floor(diffHours / 24);
-        return { text: `${days} дня(ей) назад`, class: "" };
-    }
-
-    async function loadNews() {
+    async function fetchNews() {
         const grid = document.getElementById('newsGrid');
+        grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка...</div>';
         try {
             const response = await fetch('/api/news');
-            const news = await response.json();
-            
-            if (news.length === 0) {
-                grid.innerHTML = '<div class="loading">Новости загружаются. Подождите, идёт парсинг...</div>';
+            if (!response.ok) throw new Error('API ошибка');
+            const data = await response.json();
+            allNews = data;
+            if (allNews.length === 0) {
+                grid.innerHTML = '<div class="loading">Пока нет свежих новостей. Загляните позже 🌾</div>';
+                document.getElementById('pagination').innerHTML = '';
                 return;
             }
-
-            grid.innerHTML = news.map(item => {
-                const freshness = getFreshness(item.created_at);
-                return `
-                    <div class="news-card">
-                        <img class="card-img" src="${item.image_url || 'https://images.unsplash.com/photo-1563897539633-3f6af64f0dc2?w=600'}" loading="lazy">
-                        <div class="card-content">
-                            <div class="date">
-                                <i class="far fa-calendar-alt"></i> ${item.date}
-                                ${freshness.text !== "Только что" ? '' : `<span class="${freshness.class}"><i class="fas fa-fire"></i> ${freshness.text}</span>`}
-                            </div>
-                            <div class="card-title">${escapeHtml(item.title)}</div>
-                            <div class="desc">${escapeHtml(item.description)}</div>
-                            <div style="margin-top: 12px; font-size: 0.7rem; color: var(--accent);">
-                                <i class="fas fa-database"></i> ${escapeHtml(item.source || 'Муслюмово LIFE')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        } catch (error) {
-            grid.innerHTML = '<div class="loading">Ошибка загрузки. Перезагрузите страницу.</div>';
+            currentPage = 1;
+            renderCurrentPage();
+            renderPagination();
+        } catch (err) {
+            grid.innerHTML = '<div class="loading">Не удалось загрузить новости. Проверьте соединение.</div>';
         }
+    }
+
+    function renderCurrentPage() {
+        const start = (currentPage - 1) * newsPerPage;
+        const end = start + newsPerPage;
+        const pageNews = allNews.slice(start, end);
+        const grid = document.getElementById('newsGrid');
+        if (pageNews.length === 0) {
+            grid.innerHTML = '<div class="loading">Новости на этой странице отсутствуют</div>';
+            return;
+        }
+        grid.innerHTML = pageNews.map(item => {
+            let image = item.image_url || 'https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600';
+            return `
+                <div class="news-card">
+                    <img class="card-img" src="${image}" alt="новость" loading="lazy" onerror="this.src='https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600'">
+                    <div class="card-content">
+                        <div class="date"><i class="far fa-calendar-alt"></i> ${escapeHtml(item.date)}</div>
+                        <div class="card-title">${escapeHtml(item.title)}</div>
+                        <div class="desc">${escapeHtml(item.description)}</div>
+                        <div class="source"><i class="fas fa-database"></i> ${escapeHtml(item.source || 'Муслюмово LIFE')}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(allNews.length / newsPerPage);
+        if (totalPages <= 1) {
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+        let btns = '';
+        btns += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1 ? 'disabled style="opacity:0.5"' : ''}>‹ Назад</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+            btns += `<button class="page-btn ${i===currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+        }
+        btns += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages ? 'disabled style="opacity:0.5"' : ''}>Вперёд ›</button>`;
+        document.getElementById('pagination').innerHTML = btns;
+    }
+
+    function goPage(page) {
+        const total = Math.ceil(allNews.length / newsPerPage);
+        if (page < 1 || page > total) return;
+        currentPage = page;
+        renderCurrentPage();
+        renderPagination();
+        window.scrollTo({ top: 320, behavior: 'smooth' });
     }
 
     function escapeHtml(str) {
@@ -305,9 +372,8 @@
         });
     }
 
-    loadNews();
-    // Автообновление каждые 5 минут
-    setInterval(loadNews, 300000);
+    fetchNews();
+    setInterval(fetchNews, 300000); // каждые 5 минут
 </script>
 </body>
 </html>
