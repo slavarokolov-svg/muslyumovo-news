@@ -2,10 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Муслюмово — свежие новости района</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Муслюмово — актуальные новости</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,8 +17,7 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.2s ease;
-            scroll-behavior: smooth;
+            transition: background-color 0.3s ease;
         }
 
         :root {
@@ -27,8 +26,6 @@
             --text-primary: #111827;
             --text-secondary: #4b5563;
             --accent: #c2410c;
-            --accent-hover: #9a3412;
-            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
             --border-light: #e5e7eb;
             --footer-bg: #1f2937;
         }
@@ -50,7 +47,6 @@
 
         .header {
             background: var(--bg-secondary);
-            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
@@ -85,44 +81,37 @@
             border-radius: 60px;
             padding: 8px 16px;
             cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.02);
-            background: var(--accent);
-            color: white;
         }
 
         .hero {
             margin: 2rem 0;
             border-radius: 2rem;
-            overflow: hidden;
             background: linear-gradient(120deg, var(--bg-secondary), var(--bg-primary));
             border: 1px solid var(--border-light);
-            animation: fadeUp 0.6s ease-out;
-        }
-
-        .hero-content {
-            padding: 3rem 2rem;
+            padding: 2rem;
             text-align: center;
         }
 
         .hero h2 {
-            font-size: 2.2rem;
-            font-weight: 800;
+            font-size: 2rem;
             background: linear-gradient(to right, #f97316, #dc2626);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
         }
 
+        .update-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            margin-top: 12px;
+        }
+
         .section-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             margin: 2rem 0 1rem;
             border-left: 6px solid var(--accent);
@@ -140,28 +129,19 @@
             background: var(--bg-secondary);
             border-radius: 1.5rem;
             overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border-light);
-            animation: fadeUp 0.5s ease-out backwards;
-            cursor: pointer;
+            transition: transform 0.3s;
         }
 
         .news-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 30px -12px rgba(0, 0, 0, 0.2);
-            border-color: var(--accent);
+            transform: translateY(-5px);
         }
 
         .card-img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .news-card:hover .card-img {
-            transform: scale(1.03);
         }
 
         .card-content {
@@ -173,16 +153,23 @@
             color: var(--accent);
             font-weight: 600;
             display: flex;
+            gap: 8px;
             align-items: center;
-            gap: 6px;
-            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .fresh-badge {
+            background: #22c55e;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
         }
 
         .card-title {
-            font-size: 1.35rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 12px;
-            line-height: 1.3;
+            margin: 10px 0;
         }
 
         .desc {
@@ -193,34 +180,21 @@
         .footer {
             background: var(--footer-bg);
             color: #94a3b8;
-            padding: 2.5rem 0;
-            margin-top: 4rem;
+            padding: 2rem 0;
+            margin-top: 3rem;
             text-align: center;
-            border-top: 1px solid var(--border-light);
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .loading {
             text-align: center;
             padding: 3rem;
-            font-size: 1.2rem;
             color: var(--accent);
             grid-column: 1/-1;
         }
 
         @media (max-width: 700px) {
-            .hero h2 { font-size: 1.6rem; }
-            .news-grid { gap: 1.2rem; }
+            .hero h2 { font-size: 1.4rem; }
+            .news-grid { gap: 1rem; }
         }
     </style>
 </head>
@@ -231,11 +205,10 @@
         <div class="nav">
             <div class="logo">
                 <h1>Муслюмово LIFE</h1>
-                <p>Новости района и Республики</p>
+                <p>Новости обновляются каждые 24 часа</p>
             </div>
             <div class="theme-toggle" id="themeToggle">
-                <i class="fas fa-sun"></i>
-                <span>Тема</span>
+                <i class="fas fa-moon"></i> Тема
             </div>
         </div>
     </div>
@@ -243,25 +216,25 @@
 
 <main class="container">
     <div class="hero">
-        <div class="hero-content">
-            <h2>Свежие новости Муслюмово</h2>
-            <p style="margin-top: 12px; max-width: 650px; margin-left: auto; margin-right: auto;">Сельские вести, культура, спорт, ЖКХ и события, которые важны для каждого жителя района.</p>
+        <h2>Актуальные новости Муслюмово</h2>
+        <p style="margin-top: 12px;">Новости хранятся 7 дней, затем автоматически удаляются</p>
+        <div class="update-badge">
+            <i class="fas fa-sync-alt"></i> Обновление: каждые 24 часа
         </div>
     </div>
 
     <div class="section-title">
-        <i class="fas fa-newspaper" style="margin-right: 12px;"></i> Последние обновления
+        <i class="fas fa-clock"></i> Свежие новости (последние 7 дней)
     </div>
 
     <div class="news-grid" id="newsGrid">
-        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка новостей...</div>
+        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка...</div>
     </div>
 </main>
 
 <footer class="footer">
     <div class="container">
-        <p>© 2025 Новости Муслюмово | Данные из открытых источников</p>
-        <p style="margin-top: 8px; font-size: 0.8rem;"><i class="fas fa-map-marker-alt"></i> село Муслюмово, ул. Ленина</p>
+        <p>© 2026 Новости Муслюмово | Новости автоматически удаляются через 7 дней</p>
     </div>
 </footer>
 
@@ -276,7 +249,17 @@
         localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
     });
 
-    // Загрузка новостей из API
+    // Функция определения "свежести" новости (в днях)
+    function getFreshness(createdAt) {
+        const created = new Date(createdAt);
+        const now = new Date();
+        const diffHours = Math.floor((now - created) / (1000 * 60 * 60));
+        if (diffHours < 24) return { text: "Только что", class: "fresh-badge" };
+        if (diffHours < 48) return { text: "Вчера", class: "" };
+        const days = Math.floor(diffHours / 24);
+        return { text: `${days} дня(ей) назад`, class: "" };
+    }
+
     async function loadNews() {
         const grid = document.getElementById('newsGrid');
         try {
@@ -284,24 +267,31 @@
             const news = await response.json();
             
             if (news.length === 0) {
-                grid.innerHTML = '<div class="loading">Новости временно отсутствуют</div>';
+                grid.innerHTML = '<div class="loading">Новости загружаются. Подождите, идёт парсинг...</div>';
                 return;
             }
 
-            grid.innerHTML = news.map((item, idx) => `
-                <div class="news-card" style="animation-delay: ${idx * 0.05}s">
-                    <img class="card-img" src="${item.image_url || 'https://images.unsplash.com/photo-1563897539633-3f6af64f0dc2?w=600'}" alt="${escapeHtml(item.title)}" loading="lazy">
-                    <div class="card-content">
-                        <div class="date"><i class="far fa-calendar-alt"></i> ${escapeHtml(item.date)}</div>
-                        <div class="card-title">${escapeHtml(item.title)}</div>
-                        <div class="desc">${escapeHtml(item.description)}</div>
-                        <div style="margin-top: 12px; font-size: 0.7rem; color: var(--accent);"><i class="fas fa-database"></i> ${escapeHtml(item.source || 'Муслюмово LIFE')}</div>
+            grid.innerHTML = news.map(item => {
+                const freshness = getFreshness(item.created_at);
+                return `
+                    <div class="news-card">
+                        <img class="card-img" src="${item.image_url || 'https://images.unsplash.com/photo-1563897539633-3f6af64f0dc2?w=600'}" loading="lazy">
+                        <div class="card-content">
+                            <div class="date">
+                                <i class="far fa-calendar-alt"></i> ${item.date}
+                                ${freshness.text !== "Только что" ? '' : `<span class="${freshness.class}"><i class="fas fa-fire"></i> ${freshness.text}</span>`}
+                            </div>
+                            <div class="card-title">${escapeHtml(item.title)}</div>
+                            <div class="desc">${escapeHtml(item.description)}</div>
+                            <div style="margin-top: 12px; font-size: 0.7rem; color: var(--accent);">
+                                <i class="fas fa-database"></i> ${escapeHtml(item.source || 'Муслюмово LIFE')}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         } catch (error) {
-            grid.innerHTML = '<div class="loading">Ошибка загрузки новостей. Проверьте соединение.</div>';
-            console.error('Error:', error);
+            grid.innerHTML = '<div class="loading">Ошибка загрузки. Перезагрузите страницу.</div>';
         }
     }
 
@@ -316,8 +306,8 @@
     }
 
     loadNews();
-    // Обновление каждые 2 минуты
-    setInterval(loadNews, 120000);
+    // Автообновление каждые 5 минут
+    setInterval(loadNews, 300000);
 </script>
 </body>
 </html>
