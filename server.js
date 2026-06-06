@@ -11,9 +11,35 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Подключаемся к файлу базы данных
 const db = new sqlite3.Database('./news.db');
 
-// ... (инициализация таблиц остается без изменений) ...
+// ========== ИНИЦИАЛИЗАЦИЯ БД ==========
+// Функция для создания таблиц
+function initializeDatabase() {
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            // Создаём таблицу новостей, если она ещё не существует
+            db.run(`CREATE TABLE IF NOT EXISTS news (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                date TEXT NOT NULL,
+                description TEXT NOT NULL,
+                image_url TEXT,
+                source TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )`, (err) => {
+                if (err) {
+                    console.error('[БАЗА ДАННЫХ] Ошибка создания таблицы:', err.message);
+                    reject(err);
+                } else {
+                    console.log('[БАЗА ДАННЫХ] Таблица "news" успешно создана или уже существует.');
+                    resolve();
+                }
+            });
+        });
+    });
+}
 
 // ========== ФУНКЦИЯ УДАЛЕНИЯ СТАРЫХ НОВОСТЕЙ (старше 7 дней) ==========
 function deleteOldNews() {
@@ -28,11 +54,9 @@ function deleteOldNews() {
 
 // ========== РЕАЛЬНЫЕ НОВОСТИ ИЗ ОТКРЫТЫХ ИСТОЧНИКОВ (парсинг) ==========
 async function fetchRealNews() {
-    // --- ИСПРАВЛЕННЫЕ ИСТОЧНИКИ RSS (найденные вручную) ---
     const sources = [
         { url: 'https://www.tatar-inform.ru/rss', type: 'xml', name: 'Татар-информ' },
-        { url: 'https://kazanfirst.ru/rss', type: 'xml', name: 'Казань First' },
-        { url: 'https://www.ntrk.ru/rss/news/', type: 'xml', name: 'НТРК' }
+        { url: 'https://kazanfirst.ru/rss', type: 'xml', name: 'Казань First' }
     ];
     
     const parser = new xml2js.Parser({ explicitArray: false });
@@ -46,17 +70,15 @@ async function fetchRealNews() {
             let items = result?.rss?.channel?.item || [];
             
             if (items.length) {
-                for (let item of items.slice(0, 3)) { // 3 новости с источника
+                for (let item of items.slice(0, 3)) {
                     const title = item.title || '';
                     if (!title) continue;
                     
                     let date = new Date(item.pubDate || Date.now());
                     let formattedDate = date.toLocaleDateString('ru-RU');
-                    
                     let description = (item.description || item.summary || 'Подробнее на сайте').slice(0, 200);
-                    description = description.replace(/<[^>]*>/g, ''); // Очищаем от HTML-тегов
+                    description = description.replace(/<[^>]*>/g, '');
                     
-                    // Случайная картинка под тематику (реалистичные фото)
                     const images = [
                         'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600',
                         'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600',
@@ -85,7 +107,7 @@ async function fetchRealNews() {
     return allNews;
 }
 
-// ========== РЕЗЕРВНЫЕ НОВОСТИ (исправлены, чтобы избежать ошибки NOT NULL) ==========
+// ========== РЕЗЕРВНЫЕ НОВОСТИ (на случай, если парсинг не сработал) ==========
 function getFallbackNews() {
     const today = new Date().toLocaleDateString('ru-RU');
     return [
@@ -113,7 +135,6 @@ async function updateNews() {
     
     // 4. Добавляем новости в базу
     for (const news of freshNews) {
-        // Исправлено: проверка на наличие описания
         const description = news.description || news.desc || "Актуальная новость из Муслюмовского района.";
         
         db.run(`INSERT INTO news (title, date, description, image_url, source) VALUES (?,?,?,?,?)`,
@@ -131,14 +152,33 @@ async function updateNews() {
     console.log('[ОБНОВЛЕНИЕ] Цикл обновления завершён');
 }
 
-// ... (остальные API-роуты и запуск сервера остаются без изменений) ...
-
-// Запуск сервера
-app.listen(PORT, () => {
-    console.log(`✅ Сервер запущен: http://localhost:${PORT}`);
-    console.log(`📰 API новостей: http://localhost:${PORT}/api/news`);
-    console.log(`🕐 Новости хранятся 7 дней, обновление каждые 24 часа`);
-    
-    // Вызываем обновление сразу при старте сервера
-    updateNews();
+// ========== API РОУТЫ ==========
+app.get('/api/news', (req, res) => {
+    db.all(`SELECT * FROM news WHERE created_at > datetime('now', '-7 days') ORDER BY created_at DESC`, (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(rows);
+    });
 });
+
+// ========== ЗАПУСК СЕРВЕРА С ГАРАНТИРОВАННЫМ СОЗДАНИЕМ ТАБЛИЦЫ ==========
+// 1. Сначала создаём базу данных и таблицу
+initializeDatabase()
+    .then(() => {
+        // 2. После создания таблицы запускаем веб-сервер
+        app.listen(PORT, () => {
+            console.log(`✅ Сервер запущен: http://localhost:${PORT}`);
+            console.log(`📰 API новостей: http://localhost:${PORT}/api/news`);
+            console.log(`🕐 Новости хранятся 7 дней, обновление каждые 24 часа`);
+            
+            // 3. И только после запуска сервера начинаем работу с новостями
+            updateNews();
+            // Запускаем периодическое обновление (раз в 24 часа)
+            setInterval(updateNews, 24 * 60 * 60 * 1000);
+        });
+    })
+    .catch((err) => {
+        console.error('[КРИТИЧЕСКАЯ ОШИБКА] Не удалось инициализировать базу данных:', err);
+        process.exit(1);
+    });
