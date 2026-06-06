@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Муслюмово — свежие новости района</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.2s ease;
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --bg-primary: #f9fafb;
+            --bg-secondary: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --accent: #c2410c;
+            --accent-hover: #9a3412;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --border-light: #e5e7eb;
+            --footer-bg: #1f2937;
+        }
+
+        body.dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #334155;
+            --footer-bg: #020617;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #c2410c, #f97316);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .theme-toggle {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 60px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.02);
+            background: var(--accent);
+            color: white;
+        }
+
+        .hero {
+            margin: 2rem 0;
+            border-radius: 2rem;
+            overflow: hidden;
+            background: linear-gradient(120deg, var(--bg-secondary), var(--bg-primary));
+            border: 1px solid var(--border-light);
+            animation: fadeUp 0.6s ease-out;
+        }
+
+        .hero-content {
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #f97316, #dc2626);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            border-left: 6px solid var(--accent);
+            padding-left: 18px;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .news-card {
+            background: var(--bg-secondary);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid var(--border-light);
+            animation: fadeUp 0.5s ease-out backwards;
+            cursor: pointer;
+        }
+
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 30px -12px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .news-card:hover .card-img {
+            transform: scale(1.03);
+        }
+
+        .card-content {
+            padding: 1.4rem;
+        }
+
+        .date {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .desc {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .footer {
+            background: var(--footer-bg);
+            color: #94a3b8;
+            padding: 2.5rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--accent);
+            grid-column: 1/-1;
+        }
+
+        @media (max-width: 700px) {
+            .hero h2 { font-size: 1.6rem; }
+            .news-grid { gap: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="nav">
+            <div class="logo">
+                <h1>Муслюмово LIFE</h1>
+                <p>Новости района и Республики</p>
+            </div>
+            <div class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+                <span>Тема</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="hero">
+        <div class="hero-content">
+            <h2>Свежие новости Муслюмово</h2>
+            <p style="margin-top: 12px; max-width: 650px; margin-left: auto; margin-right: auto;">Сельские вести, культура, спорт, ЖКХ и события, которые важны для каждого жителя района.</p>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <i class="fas fa-newspaper" style="margin-right: 12px;"></i> Последние обновления
+    </div>
+
+    <div class="news-grid" id="newsGrid">
+        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка новостей...</div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2025 Новости Муслюмово | Данные из открытых источников</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;"><i class="fas fa-map-marker-alt"></i> село Муслюмово, ул. Ленина</p>
+    </div>
+</footer>
+
+<script>
+    // Тёмная тема
+    const themeToggle = document.getElementById('themeToggle');
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Загрузка новостей из API
+    async function loadNews() {
+        const grid = document.getElementById('newsGrid');
+        try {
+            const response = await fetch('/api/news');
+            const news = await response.json();
+            
+            if (news.length === 0) {
+                grid.innerHTML = '<div class="loading">Новости временно отсутствуют</div>';
+                return;
+            }
+
+            grid.innerHTML = news.map((item, idx) => `
+                <div class="news-card" style="animation-delay: ${idx * 0.05}s">
+                    <img class="card-img" src="${item.image_url || 'https://images.unsplash.com/photo-1563897539633-3f6af64f0dc2?w=600'}" alt="${escapeHtml(item.title)}" loading="lazy">
+                    <div class="card-content">
+                        <div class="date"><i class="far fa-calendar-alt"></i> ${escapeHtml(item.date)}</div>
+                        <div class="card-title">${escapeHtml(item.title)}</div>
+                        <div class="desc">${escapeHtml(item.description)}</div>
+                        <div style="margin-top: 12px; font-size: 0.7rem; color: var(--accent);"><i class="fas fa-database"></i> ${escapeHtml(item.source || 'Муслюмово LIFE')}</div>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            grid.innerHTML = '<div class="loading">Ошибка загрузки новостей. Проверьте соединение.</div>';
+            console.error('Error:', error);
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    loadNews();
+    // Обновление каждые 2 минуты
+    setInterval(loadNews, 120000);
+</script>
+</body>
+</html>
