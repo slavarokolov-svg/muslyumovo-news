@@ -2,40 +2,33 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Муслюмово — сельские вести</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Муслюмово — сельский вестник</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Rubik', sans-serif;
             background: #f6f2e8 url('https://www.transparenttextures.com/patterns/wood-pattern.png') repeat;
             color: #2c2418;
-            line-height: 1.5;
         }
-
-        /* Тёмная тема отключаем — оставляем только светлую деревенскую */
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 24px;
         }
-
-        /* Шапка с деревенским орнаментом */
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #4a3729 0%, #2f241b 100%);
+            background: linear-gradient(135deg, #4a3729, #2f241b);
             color: #fff6e8;
             padding: 1.2rem 0;
             border-bottom: 6px solid #c9a87b;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
         .header-content {
             display: flex;
             flex-wrap: wrap;
@@ -43,24 +36,18 @@
             align-items: center;
             gap: 20px;
         }
-
         .logo h1 {
             font-size: 2rem;
             font-weight: 700;
-            letter-spacing: 2px;
             background: linear-gradient(135deg, #f7d44a, #e6b422);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            text-shadow: none;
         }
         .logo p {
             font-size: 0.8rem;
             color: #e6d5b8;
-            margin-top: 5px;
         }
-
-        /* Навигация — деревенское меню */
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -73,13 +60,13 @@
             padding: 8px 0;
             border-bottom: 2px solid transparent;
             transition: 0.2s;
+            cursor: pointer;
         }
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             border-bottom-color: #e6b422;
             color: #ffdd99;
         }
-
-        /* Герой с картинкой села */
+        /* Hero */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/1676595/pexels-photo-1676595.jpeg?auto=compress&cs=tinysrgb&w=1600');
             background-size: cover;
@@ -89,17 +76,10 @@
             padding: 3rem 2rem;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
         .hero h2 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            text-shadow: 2px 2px 4px #1e3c2c;
-        }
-        .hero p {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 1rem auto;
         }
         .hero-badge {
             display: inline-block;
@@ -110,8 +90,13 @@
             font-weight: 600;
             margin-top: 12px;
         }
-
-        /* Секция новостей */
+        /* Страницы */
+        .page {
+            display: none;
+        }
+        .page.active-page {
+            display: block;
+        }
         .section-title {
             font-size: 1.8rem;
             font-weight: 700;
@@ -120,58 +105,43 @@
             border-left: 8px solid #c9a87b;
             color: #3b2a1f;
         }
-
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
             margin: 2rem 0;
         }
-
         .news-card {
             background: rgba(255, 248, 235, 0.95);
-            backdrop-filter: blur(2px);
             border-radius: 24px;
             overflow: hidden;
-            transition: all 0.3s ease;
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             border: 1px solid #eeddbb;
+            transition: transform 0.2s;
         }
         .news-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
-            border-color: #c9a87b;
         }
-
         .card-img {
             width: 100%;
             height: 200px;
             object-fit: cover;
             border-bottom: 3px solid #e6b422;
         }
-
         .card-content {
             padding: 1.5rem;
         }
-
         .date {
             font-size: 0.8rem;
             color: #b47c44;
             font-weight: 600;
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
-
         .card-title {
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 12px;
-            color: #2f241b;
-            line-height: 1.3;
         }
-
         .desc {
             color: #4a3a2a;
             margin-bottom: 16px;
@@ -180,7 +150,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-
         .source {
             font-size: 0.7rem;
             color: #b47c44;
@@ -188,14 +157,11 @@
             padding-top: 10px;
             display: inline-block;
         }
-
-        /* Пагинация в деревенском стиле */
         .pagination {
             display: flex;
             justify-content: center;
             gap: 12px;
             margin: 3rem 0;
-            flex-wrap: wrap;
         }
         .page-btn {
             background: #efdfbf;
@@ -204,19 +170,11 @@
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
-            color: #3b2a1f;
         }
         .page-btn.active {
             background: #c9a87b;
             color: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
-        .page-btn:hover:not(.active) {
-            background: #ddc8a4;
-        }
-
-        /* Подвал */
         .footer {
             background: #2f241b;
             color: #e6d5b8;
@@ -224,21 +182,32 @@
             padding: 2rem 0;
             margin-top: 3rem;
             border-top: 4px solid #c9a87b;
-            font-size: 0.85rem;
         }
-
+        .about-content {
+            background: #fff6ea;
+            padding: 2rem;
+            border-radius: 32px;
+            margin: 2rem 0;
+            line-height: 1.6;
+        }
+        .about-content h3 {
+            color: #4a3729;
+            margin: 1.5rem 0 0.5rem;
+        }
+        .contact-info {
+            background: #fff6ea;
+            padding: 2rem;
+            border-radius: 32px;
+            margin: 2rem 0;
+        }
         .loading {
             text-align: center;
             padding: 3rem;
-            font-size: 1.2rem;
             color: #b47c44;
-            grid-column: 1/-1;
         }
-
         @media (max-width: 700px) {
-            .hero h2 { font-size: 1.6rem; }
+            .hero h2 { font-size: 1.5rem; }
             .nav-links { gap: 1rem; }
-            .container { padding: 0 16px; }
         }
     </style>
 </head>
@@ -252,42 +221,134 @@
                 <p>сельские вести • душа района</p>
             </div>
             <div class="nav-links">
-                <a href="#"><i class="fas fa-home"></i> Главная</a>
-                <a href="#"><i class="fas fa-landmark"></i> О селе</a>
-                <a href="#"><i class="fas fa-calendar-week"></i> События</a>
-                <a href="#"><i class="fas fa-phone-alt"></i> Контакты</a>
+                <a data-page="home" class="active">Главная</a>
+                <a data-page="about">О селе</a>
+                <a data-page="events">События</a>
+                <a data-page="contacts">Контакты</a>
             </div>
         </div>
     </div>
 </header>
 
 <main class="container">
-    <div class="hero">
+    <!-- Герой (показывается только на главной) -->
+    <div id="heroBlock" class="hero">
         <h2>Свежий взгляд на деревенскую жизнь</h2>
-        <p>Новости, которые касаются каждого • традиции • развитие • люди</p>
+        <p>Новости, традиции, люди • живите с нами</p>
         <div class="hero-badge"><i class="fas fa-sync-alt"></i> Обновление каждые 24 часа</div>
     </div>
 
-    <div class="section-title">
-        <i class="fas fa-newspaper"></i> Последние новости (хранятся 7 дней)
+    <!-- Страница ГЛАВНАЯ (новости) -->
+    <div id="homePage" class="page active-page">
+        <div class="section-title"><i class="fas fa-newspaper"></i> Последние новости (хранятся 7 дней)</div>
+        <div class="news-grid" id="newsGrid"><div class="loading">Загрузка...</div></div>
+        <div class="pagination" id="pagination"></div>
     </div>
 
-    <div class="news-grid" id="newsGrid">
-        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка деревенских новостей...</div>
+    <!-- Страница О СЕЛЕ -->
+    <div id="aboutPage" class="page">
+        <div class="section-title"><i class="fas fa-landmark"></i> История и современность</div>
+        <div class="about-content">
+            <h3>📅 Дата основания</h3>
+            <p>Село Муслюмово основано в <strong>1740 году</strong> (по другим данным — в 1745). Название получило от основателя — татарского мурзы Муслюма.</p>
+            
+            <h3>📍 География</h3>
+            <p>Административный центр Муслюмовского района Республики Татарстан. Расположено на реке Мензеля, в 330 км от Казани.</p>
+            
+            <h3>👥 Население</h3>
+            <p>Около 8 500 человек. Большинство — татары, также проживают русские, марийцы.</p>
+            
+            <h3>🏅 Известные уроженцы</h3>
+            <ul style="margin-left: 1.5rem;">
+                <li><strong>Шамиль Аляутдинов</strong> — известный религиозный деятель, проповедник.</li>
+                <li><strong>Габдельахат Фаезов</strong> — Герой Социалистического Труда.</li>
+                <li><strong>Рамиль Гайзуллин</strong> — заслуженный артист Татарстана.</li>
+            </ul>
+            
+            <h3>🌾 Экономика</h3>
+            <p>Сельское хозяйство (зерновые, молочное животноводство), пищевая промышленность, сервисный центр.</p>
+            
+            <h3>🛕 Достопримечательности</h3>
+            <p>Мечеть «Нур», краеведческий музей, парк Победы, родник «Ключ здоровья».</p>
+        </div>
     </div>
 
-    <div class="pagination" id="pagination"></div>
+    <!-- Страница СОБЫТИЯ -->
+    <div id="eventsPage" class="page">
+        <div class="section-title"><i class="fas fa-calendar-week"></i> Афиша и мероприятия</div>
+        <div class="about-content">
+            <h3>🎉 Ближайшие события</h3>
+            <p><strong>15 июня 2026</strong> — Сабантуй. Центральная площадь села, начало в 10:00.</p>
+            <p><strong>22 июня 2026</strong> — День памяти и скорби. Митинг у мемориала.</p>
+            <p><strong>10 июля 2026</strong> — Фестиваль «Муслюмово гостеприимное». Ярмарка, концерты, национальная кухня.</p>
+            <p><strong>25 июля 2026</strong> — Турнир по борьбе «Куреш» на призы главы района.</p>
+            <h3>📢 Регулярные мероприятия</h3>
+            <p>По субботам — ярмарка выходного дня. Каждую последнюю пятницу месяца — заседание клуба «Аксакал».</p>
+        </div>
+    </div>
+
+    <!-- Страница КОНТАКТЫ -->
+    <div id="contactsPage" class="page">
+        <div class="section-title"><i class="fas fa-address-card"></i> Как нас найти</div>
+        <div class="contact-info">
+            <p><i class="fas fa-map-marker-alt"></i> <strong>Администрация Муслюмовского района</strong><br>
+            423970, Республика Татарстан, с. Муслюмово, ул. Ленина, д. 2</p>
+            <p><i class="fas fa-phone-alt"></i> <strong>Телефон:</strong> +7 (85556) 2-11-35</p>
+            <p><i class="fas fa-envelope"></i> <strong>E-mail:</strong> muslumovo@tatar.ru</p>
+            <p><i class="fas fa-globe"></i> <strong>Официальный сайт района:</strong> muslumovo.tatarstan.ru</p>
+            <p><i class="fas fa-clock"></i> <strong>Приём граждан:</strong> понедельник–пятница с 8:00 до 17:00, перерыв 12:00–13:00</p>
+        </div>
+    </div>
 </main>
 
 <footer class="footer">
     <div class="container">
         <p><i class="fas fa-map-marker-alt"></i> Муслюмово, ул. Центральная, 15 | <i class="fas fa-envelope"></i> vesti@muslumovo.ru</p>
-        <p style="margin-top: 12px;">© 2026 — новости села. Живём и работаем на родной земле.</p>
+        <p>© 2026 — новости села. Живём и работаем на родной земле.</p>
     </div>
 </footer>
 
 <script>
-    // Пагинация и загрузка с API
+    // ========== НАВИГАЦИЯ МЕЖДУ СТРАНИЦАМИ ==========
+    const pages = {
+        home: document.getElementById('homePage'),
+        about: document.getElementById('aboutPage'),
+        events: document.getElementById('eventsPage'),
+        contacts: document.getElementById('contactsPage')
+    };
+    const heroBlock = document.getElementById('heroBlock');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    function showPage(pageId) {
+        Object.values(pages).forEach(p => p.classList.remove('active-page'));
+        pages[pageId].classList.add('active-page');
+        // Прячем герой только не на главной
+        if (pageId === 'home') {
+            heroBlock.style.display = 'block';
+        } else {
+            heroBlock.style.display = 'none';
+        }
+        navLinks.forEach(link => {
+            if (link.getAttribute('data-page') === pageId) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const page = link.getAttribute('data-page');
+            showPage(page);
+            if (page === 'home') {
+                // если возвращаемся на главную, обновляем новости
+                fetchNews();
+            }
+        });
+    });
+
+    // ========== НОВОСТИ И ПАГИНАЦИЯ ==========
     let allNews = [];
     let currentPage = 1;
     const newsPerPage = 6;
@@ -297,7 +358,7 @@
         grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> Загрузка...</div>';
         try {
             const response = await fetch('/api/news');
-            if (!response.ok) throw new Error('API ошибка');
+            if (!response.ok) throw new Error();
             const data = await response.json();
             allNews = data;
             if (allNews.length === 0) {
@@ -326,7 +387,7 @@
             let image = item.image_url || 'https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600';
             return `
                 <div class="news-card">
-                    <img class="card-img" src="${image}" alt="новость" loading="lazy" onerror="this.src='https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600'">
+                    <img class="card-img" src="${escapeHtml(image)}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600'">
                     <div class="card-content">
                         <div class="date"><i class="far fa-calendar-alt"></i> ${escapeHtml(item.date)}</div>
                         <div class="card-title">${escapeHtml(item.title)}</div>
@@ -372,8 +433,9 @@
         });
     }
 
+    // Запуск
     fetchNews();
-    setInterval(fetchNews, 300000); // каждые 5 минут
+    setInterval(fetchNews, 300000);
 </script>
 </body>
 </html>

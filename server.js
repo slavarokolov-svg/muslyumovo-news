@@ -13,6 +13,22 @@ app.use(express.static('public'));
 
 const db = new sqlite3.Database('./news.db');
 
+// Пул картинок для новостей (деревенский стиль, разнообразие)
+const imagePool = [
+    'https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'https://images.pexels.com/photos/1676595/pexels-photo-1676595.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'https://images.pexels.com/photos/574495/pexels-photo-574495.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'https://images.pexels.com/photos/1194713/pexels-photo-1194713.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'https://images.pexels.com/photos/355863/pexels-photo-355863.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'https://images.pexels.com/photos/533923/pexels-photo-533923.jpeg?auto=compress&cs=tinysrgb&w=600',
+    'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=600'
+];
+
+function getRandomImage() {
+    return imagePool[Math.floor(Math.random() * imagePool.length)];
+}
+
 // Инициализация БД
 function initializeDatabase() {
     return new Promise((resolve, reject) => {
@@ -31,12 +47,10 @@ function initializeDatabase() {
     });
 }
 
-// Удаление старых новостей
 function deleteOldNews() {
     db.run(`DELETE FROM news WHERE created_at < datetime('now', '-7 days')`);
 }
 
-// Резервные новости (с картинками!)
 function getFallbackNews() {
     const today = new Date().toLocaleDateString('ru-RU');
     return [
@@ -44,27 +58,23 @@ function getFallbackNews() {
             title: "В Муслюмово обсуждают строительство новой школы",
             date: today,
             description: "Проект рассчитан на 600 мест, начало строительства — 2027 год.",
-            image_url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600",
             source: "Администрация"
         },
         {
             title: "Фермеры района готовятся к весеннему севу",
             date: today,
             description: "Закуплено 200 тонн семян и удобрений.",
-            image_url: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600",
             source: "ТатАгро"
         },
         {
             title: "Концерт ко Дню Победы прошёл в ДК",
             date: today,
             description: "Выступили местные коллективы и приглашённые артисты.",
-            image_url: "https://images.unsplash.com/photo-1517454427005-3ad2b5b9b1b8?w=600",
             source: "Муслюмовский ДК"
         }
     ];
 }
 
-// Парсинг RSS (реальные новости)
 async function fetchRealNews() {
     const sources = [
         { url: 'https://www.tatar-inform.ru/rss', name: 'Татар-информ' },
@@ -86,7 +96,6 @@ async function fetchRealNews() {
                     title: item.title,
                     date: new Date(item.pubDate).toLocaleDateString('ru-RU'),
                     description: description,
-                    image_url: 'https://images.unsplash.com/photo-1563897539633-3f6af64f0dc2?w=600',
                     source: src.name
                 });
             }
@@ -95,7 +104,6 @@ async function fetchRealNews() {
     return allNews;
 }
 
-// Обновление новостей (без дублей за последние 24 часа)
 async function updateNews() {
     console.log('[ОБНОВЛЕНИЕ] Старт');
     deleteOldNews();
@@ -106,15 +114,15 @@ async function updateNews() {
     }
 
     for (const news of freshNews) {
-        // Проверка: не было ли такой новости за последние 24 часа
         const exists = await new Promise((resolve) => {
             db.get(`SELECT id FROM news WHERE title = ? AND created_at > datetime('now', '-1 day')`, [news.title], (err, row) => {
                 resolve(!!row);
             });
         });
         if (!exists) {
+            const imageUrl = getRandomImage();
             db.run(`INSERT INTO news (title, date, description, image_url, source) VALUES (?,?,?,?,?)`,
-                [news.title, news.date, news.description, news.image_url, news.source]);
+                [news.title, news.date, news.description, imageUrl, news.source]);
             console.log(`[ОБНОВЛЕНИЕ] Добавлено: ${news.title.slice(0, 50)}`);
         } else {
             console.log(`[ОБНОВЛЕНИЕ] Дубль пропущен: ${news.title.slice(0, 50)}`);
@@ -123,7 +131,6 @@ async function updateNews() {
     console.log('[ОБНОВЛЕНИЕ] Готово');
 }
 
-// API
 app.get('/api/news', (req, res) => {
     db.all(`SELECT * FROM news WHERE created_at > datetime('now', '-7 days') ORDER BY created_at DESC`, (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -131,7 +138,6 @@ app.get('/api/news', (req, res) => {
     });
 });
 
-// Запуск
 initializeDatabase().then(() => {
     app.listen(PORT, () => {
         console.log(`✅ Сервер на порту ${PORT}`);
