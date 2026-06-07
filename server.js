@@ -13,20 +13,28 @@ app.use(express.static('public'));
 
 const db = new sqlite3.Database('./news.db');
 
-// Пул картинок для новостей (деревенский стиль, разнообразие)
-const imagePool = [
-    'https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/1676595/pexels-photo-1676595.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/574495/pexels-photo-574495.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/1194713/pexels-photo-1194713.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/355863/pexels-photo-355863.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/533923/pexels-photo-533923.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=600'
-];
+// Банк картинок по тематикам (прямые ссылки на качественные фото)
+const imageCategories = {
+    default: 'https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=600',
+    accident: 'https://images.pexels.com/photos/2735255/pexels-photo-2735255.jpeg?auto=compress&cs=tinysrgb&w=600',
+    school: 'https://images.pexels.com/photos/159775/class-school-school-books-young-159775.jpeg?auto=compress&cs=tinysrgb&w=600',
+    harvest: 'https://images.pexels.com/photos/162240/golden-wheat-field-ears-wheat-harvest-162240.jpeg?auto=compress&cs=tinysrgb&w=600',
+    politics: 'https://images.pexels.com/photos/596750/pexels-photo-596750.jpeg?auto=compress&cs=tinysrgb&w=600',
+    culture: 'https://images.pexels.com/photos/167491/pexels-photo-167491.jpeg?auto=compress&cs=tinysrgb&w=600',
+    sport: 'https://images.pexels.com/photos/260024/pexels-photo-260024.jpeg?auto=compress&cs=tinysrgb&w=600',
+    nature: 'https://images.pexels.com/photos/158028/bellingrath-gardens-botanical-garden-flower-garden-158028.jpeg?auto=compress&cs=tinysrgb&w=600'
+};
 
-function getRandomImage() {
-    return imagePool[Math.floor(Math.random() * imagePool.length)];
+function getImageForTitle(title) {
+    const lower = title.toLowerCase();
+    if (lower.includes('авар') || lower.includes('дтп') || lower.includes('пожар') || lower.includes('чп')) return imageCategories.accident;
+    if (lower.includes('школ') || lower.includes('учител') || lower.includes('образован')) return imageCategories.school;
+    if (lower.includes('урожай') || lower.includes('агро') || lower.includes('фермер') || lower.includes('сельхоз')) return imageCategories.harvest;
+    if (lower.includes('депутат') || lower.includes('правительств') || lower.includes('мин')) return imageCategories.politics;
+    if (lower.includes('концерт') || lower.includes('фестиваль') || lower.includes('культур') || lower.includes('праздник')) return imageCategories.culture;
+    if (lower.includes('спорт') || lower.includes('футбол') || lower.includes('побед') || lower.includes('турнир')) return imageCategories.sport;
+    if (lower.includes('природа') || lower.includes('погод') || lower.includes('экологи')) return imageCategories.nature;
+    return imageCategories.default;
 }
 
 // Инициализация БД
@@ -54,31 +62,19 @@ function deleteOldNews() {
 function getFallbackNews() {
     const today = new Date().toLocaleDateString('ru-RU');
     return [
-        {
-            title: "В Муслюмово обсуждают строительство новой школы",
-            date: today,
-            description: "Проект рассчитан на 600 мест, начало строительства — 2027 год.",
-            source: "Администрация"
-        },
-        {
-            title: "Фермеры района готовятся к весеннему севу",
-            date: today,
-            description: "Закуплено 200 тонн семян и удобрений.",
-            source: "ТатАгро"
-        },
-        {
-            title: "Концерт ко Дню Победы прошёл в ДК",
-            date: today,
-            description: "Выступили местные коллективы и приглашённые артисты.",
-            source: "Муслюмовский ДК"
-        }
+        { title: "В Муслюмово обсудили подготовку к Сабантую 2026", date: today, description: "Оргкомитет определил дату праздника - 28 июня. Запланированы скачки, борьба куреш, ярмарка.", source: "Администрация" },
+        { title: "Новые автобусы вышли на маршрут Муслюмово - Казань", date: today, description: "Комфортабельные автобусы большого класса будут совершать 4 рейса в день.", source: "Минтранс РТ" },
+        { title: "В районе стартовал конкурс «Лучший дом»", date: today, description: "Жителей приглашают принять участие в благоустройстве придомовых территорий.", source: "Совет района" }
     ];
 }
 
 async function fetchRealNews() {
+    // Расширенный список источников (региональные и федеральные)
     const sources = [
         { url: 'https://www.tatar-inform.ru/rss', name: 'Татар-информ' },
-        { url: 'https://kazanfirst.ru/rss', name: 'Казань First' }
+        { url: 'https://kazanfirst.ru/rss', name: 'Казань First' },
+        { url: 'https://realnoevremya.ru/rss', name: 'Реальное время' },
+        { url: 'http://feeds.bbci.co.uk/news/rss.xml', name: 'BBC' } // запасной, но можно убрать
     ];
     const parser = new xml2js.Parser({ explicitArray: false });
     let allNews = [];
@@ -88,20 +84,37 @@ async function fetchRealNews() {
             const response = await axios.get(src.url, { timeout: 10000 });
             const result = await parser.parseStringPromise(response.data);
             let items = result?.rss?.channel?.item || [];
-            for (let item of items.slice(0, 3)) {
-                if (!item.title) continue;
-                let description = (item.description || '').replace(/<[^>]*>/g, '').slice(0, 200);
-                if (!description) description = 'Подробнее на сайте';
+            if (!items.length && result?.feed?.entry) items = result.feed.entry;
+            for (let item of items.slice(0, 4)) {
+                let title = item.title || '';
+                if (!title) continue;
+                // Очищаем описание от HTML
+                let description = (item.description || item.summary || 'Подробнее на сайте').replace(/<[^>]*>/g, '').slice(0, 300);
+                let pubDate = item.pubDate || item.published || item.updated || new Date().toISOString();
+                let formattedDate = new Date(pubDate).toLocaleDateString('ru-RU');
                 allNews.push({
-                    title: item.title,
-                    date: new Date(item.pubDate).toLocaleDateString('ru-RU'),
+                    title: title,
+                    date: formattedDate,
                     description: description,
                     source: src.name
                 });
             }
-        } catch(e) {}
+        } catch(e) {
+            console.log('Парсинг ошибка', src.url, e.message);
+        }
     }
-    return allNews;
+    // Удаляем дубликаты по заголовку (регистронезависимо)
+    const unique = [];
+    const titlesSet = new Set();
+    for (const n of allNews) {
+        const key = n.title.toLowerCase().trim();
+        if (!titlesSet.has(key)) {
+            titlesSet.add(key);
+            unique.push(n);
+        }
+    }
+    console.log(`[ПАРСИНГ] Получено уникальных новостей: ${unique.length}`);
+    return unique.slice(0, 15); // не более 15 свежих
 }
 
 async function updateNews() {
@@ -110,22 +123,24 @@ async function updateNews() {
 
     let freshNews = await fetchRealNews();
     if (freshNews.length === 0) {
+        console.log('Нет реальных новостей, используем резерв');
         freshNews = getFallbackNews();
     }
 
     for (const news of freshNews) {
+        // Проверка дублей за последние 2 дня
         const exists = await new Promise((resolve) => {
-            db.get(`SELECT id FROM news WHERE title = ? AND created_at > datetime('now', '-1 day')`, [news.title], (err, row) => {
+            db.get(`SELECT id FROM news WHERE lower(title) = lower(?) AND created_at > datetime('now', '-2 day')`, [news.title], (err, row) => {
                 resolve(!!row);
             });
         });
         if (!exists) {
-            const imageUrl = getRandomImage();
+            const imageUrl = getImageForTitle(news.title);
             db.run(`INSERT INTO news (title, date, description, image_url, source) VALUES (?,?,?,?,?)`,
                 [news.title, news.date, news.description, imageUrl, news.source]);
-            console.log(`[ОБНОВЛЕНИЕ] Добавлено: ${news.title.slice(0, 50)}`);
+            console.log(`[ДОБАВЛЕНО] ${news.title.slice(0, 60)}`);
         } else {
-            console.log(`[ОБНОВЛЕНИЕ] Дубль пропущен: ${news.title.slice(0, 50)}`);
+            console.log(`[ДУБЛЬ] ${news.title.slice(0, 50)}`);
         }
     }
     console.log('[ОБНОВЛЕНИЕ] Готово');
@@ -140,7 +155,7 @@ app.get('/api/news', (req, res) => {
 
 initializeDatabase().then(() => {
     app.listen(PORT, () => {
-        console.log(`✅ Сервер на порту ${PORT}`);
+        console.log(`✅ Сервер запущен на порту ${PORT}`);
         updateNews();
         setInterval(updateNews, 24 * 60 * 60 * 1000);
     });
